@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DatePicker from '../components/DatePicker'; 
 import * as Yup from 'yup'; 
 import { Formik, Form } from 'formik'; 
@@ -25,20 +25,29 @@ const initialValues = {
 
 const FormView = () => {
   const classes = useStyles(); 
+  const [values, setValues] = useState(initialValues);
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
+      onSubmit={values => {
+        setValues(values);
+      }}
     >
       {props => (
-        <DatePicker 
-          value={props.values.date}
-          error={Boolean(props.errors.date)}
-          helperText={props.errors.date}
-          onChange={date => props.setFieldValue('date', date)}
-          label="納品日"
-        />
+        <div className={classes.root}>
+          <DatePicker 
+            value={props.values.date}
+            error={Boolean(props.errors.date)}
+            helperText={props.errors.date}
+            name={'date'}
+            onChange={date => props.setFieldValue('date', date)}
+            label="納品日"
+          />
+          <pre>{JSON.stringify(props.values, null, 2)}</pre>
+          <pre>{JSON.stringify(props.errors, null, 2)}</pre>
+        </div>
       )}
     </Formik>
   )
