@@ -17,7 +17,7 @@ const columns = [
 
 const shohinList = shohinListSource.map((row) => {
   const dic = {};
-  Object.entries(row).map(([ title, value ]) => {
+  Object.entries(row).forEach(([ title, value ]) => {
     const name = columns.find(({ title: check }) => check === title).name;
     dic[name] = value;
   });
@@ -59,11 +59,13 @@ const ShohinSelector = ({
       <Autocomplete 
         className={clsx(classes.root, className)}
         
-        options={shohinList.filter((_, i) => i % 100 == 0)}
+        options={shohinList.filter((_, i) => i % 100 === 0)}
 
         getOptionLabel={option => optionLabel(option)}
+        
         value={value}
         onChange={(_e, value) => onChange(value)}
+
         renderInput={props => (
           <TextField
             {...props}
@@ -77,9 +79,6 @@ const ShohinSelector = ({
           
           if (inputValue.length === 0) return options;
           const values = inputValue.replace('　', ' ').split(' ').filter(value => value !== '');
-
-          console.log(values);
-
 
           return options.filter((option) => {
             const target = getOptionLabel(option);

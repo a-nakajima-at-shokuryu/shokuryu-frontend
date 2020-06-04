@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
 
 const initialValues = {
   date: new Date(), 
-  shohin: {}, 
+  shohin: null, 
 };
 
 const FormView = () => {
