@@ -42,11 +42,14 @@ const useCalendarTheme = ({ date, weekStartsOn }) => {
           height: 60, 
         }, 
       }, 
-      // 年、月ツールバーのフォントサイズ
+      // 年、月、日ツールバーのフォントサイズ
       MuiTypography: {
-        h4: {
-          fontSize: '1.5rem', 
+        h4: { // 年、月
+          fontSize: 22, 
         },  
+        body2: {
+          fontSize: 14, 
+        }, 
       }, 
       // 曜日ラベルの色
       MuiPickersCalendarHeader: {
