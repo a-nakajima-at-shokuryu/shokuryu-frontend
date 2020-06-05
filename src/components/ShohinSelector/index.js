@@ -15,14 +15,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const optionLabel = option => {
-  const { hincd, hinnm, size, yoryo, juryo, irisu } = option;
+  const { hincd, hinnm, size, yoryo, jyuku, irisu } = option;
 
   if (hincd === undefined) {
     return '';
   }
 
   return `
-    ${hincd} ${hinnm} ${size} ${yoryo} ${juryo} ${irisu}
+    ${hincd} ${hinnm} ${size} ${yoryo} ${jyuku} ${irisu}
   `;
 }
 

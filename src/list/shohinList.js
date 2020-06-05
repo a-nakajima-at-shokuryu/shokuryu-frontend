@@ -5,7 +5,7 @@ export const columns = [
   ['hinnm', '商品名'  ,  "ﾏｱｼﾞｵﾄｼﾐ",], 
   ['size' , 'サイズ'  ,  "",], 
   ['yoryo', '容量'   ,  1000,], 
-  ['juryo', '重量区分' ,  "G",], 
+  ['jyuku', '重量区分' ,  "G",], 
   ['irisu', '入数'   ,  20], 
 ].map(([name, title, sample ]) => ({ name, title, sample }));
 
