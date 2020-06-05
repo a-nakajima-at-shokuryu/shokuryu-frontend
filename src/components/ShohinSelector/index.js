@@ -2,8 +2,11 @@ import React from 'react';
 import {
   Autocomplete, 
 } from '@material-ui/lab';
-import { TextField, makeStyles } from '@material-ui/core';
+import { TextField, makeStyles, useMediaQuery, useTheme, ListSubheader } from '@material-ui/core';
 import clsx from 'clsx';
+import {
+  VariableSizeList, 
+} from 'react-window'
 
 import { shohinList } from '../../list/shohinList';
 import { filterOptions } from './ShohinSelectorFilterOptions';
@@ -43,7 +46,8 @@ const ShohinSelector = ({
       <Autocomplete 
         className={clsx(classes.root, className)}
         
-        options={shohinList.filter((_, i) => i % 100 === 0)}
+        // options={shohinList.filter((_, i) => i % 100 === 0)}
+        options={shohinList}
 
         getOptionLabel={option => optionLabel(option)}
         
@@ -58,6 +62,8 @@ const ShohinSelector = ({
           />
         )}
 
+        ListboxComponent={ListboxComponent}
+
         filterOptions={filterOptions}
 
         {...other}
@@ -67,3 +73,67 @@ const ShohinSelector = ({
 }
 
 export default ShohinSelector; 
+
+const LISTBOX_PADDING = 8; 
+
+const renderRow = props => {
+  const { data, index, style } = props;
+  return React.cloneElement(data[index], {
+    style: {
+      ...style, 
+      top: style.top + LISTBOX_PADDING, 
+    }, 
+  });
+};
+
+const OuterElementContext = React.createContext({});
+
+const OuterElementType = React.forwardRef((props, ref) => {
+  const outerProps = React.useContext(OuterElementContext);
+  return <div ref={ref} {...props} {...outerProps} />;
+});
+
+const ListboxComponent = React.forwardRef((props, ref) => {
+  const { children, ...other } = props;
+  const itemData = React.Children.toArray(children);
+  const theme = useTheme();
+  const smUp = useMediaQuery(theme.breakpoints.up('sm'), { noSSr: true });
+  const itemCount = itemData.length;
+  const itemSize = smUp ? 36: 48; 
+
+  const getChildSize = child => {
+    if (React.isValidElement(child) && child.type === ListSubheader) {
+      return 48; 
+    }
+
+    return itemSize; 
+  };
+
+  const getHeight = () => {
+    if (itemCount > 8) {
+      return 8 * itemSize; 
+    }
+
+    return itemData.map(getChildSize).reduce((a, b) => a + b, 0);
+  };
+
+  return (
+    <div ref={ref}>
+      <OuterElementContext.Provider value={other}>
+        <VariableSizeList
+          itemData={itemData}
+          height={getHeight() + 2 * LISTBOX_PADDING}
+          width="100%"
+          key={itemCount}
+          outerElementType={OuterElementType}
+          innerElementType="ul"
+          itemSize={index => getChildSize(itemData[index])}
+          overscanCount={5}
+          itemCount={itemCount}
+        >
+          {renderRow}
+        </VariableSizeList>
+      </OuterElementContext.Provider>
+    </div>
+  );
+});
